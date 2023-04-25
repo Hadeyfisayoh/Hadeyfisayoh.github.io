@@ -1,65 +1,119 @@
-body {
-    background-color: #f5f5f5; /* add a light gray color */
-    background-image: linear-gradient(to bottom right, #e0ffff, #f5f5dc); /* add a gradient */
-    font-family: Arial, sans-serif;
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background-color: #f7f7f7;
   }
   
-  
-  .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  .upload {
+    margin-bottom: 30px;
   }
   
-  h1 {
-    font-size: 32px;
-    text-align: center;
-    margin-top: 0;
+  .upload label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    color: #333333;
   }
   
-  .form-group {
+  .upload #uploadedImage {
+    display: block;
+    max-width: 100%;
+    height: auto;
     margin-bottom: 20px;
   }
   
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-size: 18px;
+  .symmetry-options {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 30px;
+  }
+  
+  .symmetry-label {
+    margin-right: 20px;
+    font-size: 24px;
+    font-family: "Poppins", sans-serif;
     font-weight: bold;
+    color: #333333;
   }
   
-  input[type="file"] {
+  .radio-group {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .radio-group label {
+    margin-right: 20px;
+    font-size: 18px;
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    color: #333333;
+  }
+  
+  .radio-group input[type="radio"] {
+    display: none;
+  }
+  
+  .radio-group input[type="radio"] + label {
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+    border: 2px solid #4f4f4f;
+    border-radius: 50%;
+    vertical-align: middle;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .radio-group input[type="radio"] + label::before {
+    content: "";
     display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 5px;
+    width: 14px;
+    height: 14px;
+    background-color: #4f4f4f;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .radio-group input[type="radio"]:checked + label::before {
+    background-color: #f7f7f7;
+  }
+  
+  button {
+    margin-top: 30px;
+    padding: 10px 20px;
+    font-size: 24px;
+    font-family: "Poppins", sans-serif;
+    font-weight: bold;
+    color: #ffffff;
+    background-color: #4f4f4f;
     border: none;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    cursor: pointer;
   }
   
-  img {
+  .result {
+    margin-top: 30px;
+  }
+  
+  .result img {
     max-width: 100%;
     height: auto;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  canvas {
     display: block;
-    margin: 20px auto;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-  }
-  
-  #symmetricalImage {
-    margin-top: 50px;
-  }
-  
-   canvas {
     max-width: 100%;
     height: auto;
-    display: block;
-    margin: 20px auto;
-    border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 20px;
   }
   
