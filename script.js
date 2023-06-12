@@ -1,51 +1,75 @@
-const inputImage = document.getElementById('imageUpload');
-const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const outputDiv = document.querySelector('.output');
+window.addEventListener('DOMContentLoaded', function() {
+  const createSymmetricalImage = document.getElementById('createSymmetricalImage');
+  const symmetricalImage = document.getElementById('symmetricalImage');
+  const reflectionRadio = document.getElementById('reflection');
+  const scalingRadio = document.getElementById('scaling');
+  const rotationRadio = document.getElementById('rotation');
+  const inputImage = document.getElementById('inputImage');
+  const uploadedImagePreview = document.getElementById('uploadedImagePreview');
 
-// Set canvas size based on window width
-function setCanvasSize() {
-  const windowWidth = window.innerWidth;
-  const canvasWidth = Math.min(600, windowWidth - 40);
-  const canvasHeight = canvasWidth * 2;
-  canvas.width = canvasWidth;
-  canvas.height = canvasHeight;
-}
+  createSymmetricalImage.addEventListener('click', function() {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    const uploadedImageUrl = URL.createObjectURL(inputImage.files[0]);
 
-// Draw original image and symmetrical image on canvas
-function drawImagesOnCanvas(imageUrl) {
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.src = imageUrl;
-  img.onload = function() {
-    setCanvasSize();
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width / 2, canvas.height / 2);
-    ctx.save();
-    ctx.translate(canvas.width, canvas.height / 2);
-    ctx.scale(-1, 1);
-    ctx.drawImage(img, 0, 0, canvas.width / 2, canvas.height / 2);
-    ctx.restore();
-  }
-}
+    img.addEventListener('load', function() {
+      canvas.width = img.width * 2;
+      canvas.height = img.height;
 
-// Handle file upload
-inputImage.addEventListener('change', function(event) {
-  const uploadedImage = event.target.files[0];
-  const uploadedImageUrl = URL.createObjectURL(uploadedImage);
-  drawImagesOnCanvas(uploadedImageUrl);
+      if (reflectionRadio.checked) {
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.scale(-1, 1);
+        ctx.translate(-img.width / 2, -img.height / 2);
+        ctx.drawImage(img, 0, 0);
+        ctx.restore();
+      } else if (scalingRadio.checked) {
+        ctx.drawImage(img, 0, 0);
+        ctx.scale(-1, 1);
+        ctx.drawImage(img, -img.width * 2, 0);
+        ctx.scale(-0.5, 1);
+        ctx.drawImage(img, -img.width, 0);
+        ctx.drawImage(img, img.width, 0);
+        ctx.restore();
+      } else if (rotationRadio.checked) {
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(Math.PI);
+        ctx.translate(-img.width / 2, -img.height / 2);
+        ctx.drawImage(img, 0, 0);
+        ctx.rotate(Math.PI / 2);
+        ctx.translate(-img.height, 0);
+        ctx.drawImage(img, 0, 0);
+        ctx.rotate(Math.PI / 2);
+        ctx.translate(img.height, img.width);
+        ctx.drawImage(img, 0, 0);
+        ctx.rotate(Math.PI / 2);
+        ctx.translate(img.width, -img.height);
+        ctx.drawImage(img, 0, 0);
+        ctx.restore();
+      }
+
+      symmetricalImage.width = canvas.width;
+      symmetricalImage.height = canvas.height;
+      symmetricalImage.getContext('2d').drawImage(canvas, 0, 0);
+
+      // Show the download button
+      const downloadButton = document.getElementById('downloadButton');
+      downloadButton.style.display = 'block';
+
+      // Add click event listener to the download button
+      downloadButton.addEventListener('click', function() {
+        // Create a temporary link element
+        const link = document.createElement('a');
+        link.href = symmetricalImage.toDataURL(); // Convert canvas to data URL
+        link.download = 'symmetrical_image.png'; // Set the download filename
+        link.click(); // Trigger the download
+      });
+    });
+
+    uploadedImagePreview.src = uploadedImageUrl;
+    uploadedImagePreview.style.display = 'block';
+
+    img.src = uploadedImageUrl;
+  });
 });
-
-// Redraw canvas on window resize
-window.addEventListener('resize', function() {
-  setCanvasSize();
-  drawImagesOnCanvas(canvas.toDataURL());
-});
-
-// Style canvas
-canvas.style.maxWidth = '100%';
-canvas.style.height = 'auto';
-canvas.style.display = 'block';
-canvas.style.margin = '20px auto';
-canvas.style.borderRadius = '5px';
-canvas.style.boxShadow = '0 2px 10px rgba(0, 0, 0, 0.2)';
